@@ -1,5 +1,7 @@
 #include "escape.h"
 
+#include <stdarg.h>
+
 static const char* const cursor_seq[] = {
     [wrap_on]   = "?7h",
     [wrap_off]  = "?7l",
@@ -11,16 +13,42 @@ static const char* const cursor_seq[] = {
     [left]      = "D",
 };
 
-void fcursor(FILE* file, enum CursorEsc code, int d) {
+int cursor(enum CursorEsc code, ...) {
+    va_list arg;
+    va_start(arg, code);
+
+    int printed;
+
     // only escape sequences up, down, right and left
     // use an argument
     if(code < up)
-        fprintf(file, "\x1b[%s", cursor_seq[code]);
+        printed = fprintf(stdout, "\x1b[%s", cursor_seq[code]);
 
     else
-        fprintf(file, "\x1b[%d%s", d, cursor_seq[code]);
+        printed = fprintf(stdout, "\x1b[%d%s",
+                        va_arg(arg, int), cursor_seq[code]);
+
+    va_end(arg);
+
+    return printed;
 }
 
-void cursor(enum CursorEsc code, int d) {
-    fcursor(stdout, code, d);
+int fcursor(FILE* file, enum CursorEsc code, ...) {
+    va_list arg;
+    va_start(arg, code);
+
+    int printed;
+
+    // only escape sequences up, down, right and left
+    // use an argument
+    if(code < up)
+        printed = fprintf(file, "\x1b[%s", cursor_seq[code]);
+
+    else
+        printed = fprintf(file, "\x1b[%d%s",
+                        va_arg(arg, int), cursor_seq[code]);
+
+    va_end(arg);
+
+    return printed;
 }

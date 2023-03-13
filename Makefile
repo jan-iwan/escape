@@ -1,20 +1,36 @@
 MAKEFLAGS += --silent
 
 CC = gcc
-TARGET = libescape.a
-CFLAGS = -c -O2
+CFLAGS = -c -Wall -Werror -fPIC -O2 -pedantic
+LDFLAGS = -shared
+
+TARGET_LIB = libescape.so
+HEADER = src/escape.h 
+PREFIX=/usr/local
+INSTALL_DIR = $(PREFIX)/lib
+INCLUDE_INSTALL_DIR = $(PREFIX)/include
 
 SRC_DIR = ./src
 SRCS = $(shell find $(SRC_DIR) -name '*.c')
 BUILD_DIR = ./build
-OBJS = $(SRCS:%=$(BUILD_DIR)/%.o)
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 
-$(TARGET): $(OBJS)
-	ar rcs $@ $^
+all: $(TARGET_LIB)
 
-$(BUILD_DIR)/%.c.o: %.c
+$(TARGET_LIB): $(OBJS)
+	$(CC) $(LDFLAGS) $^ -o $@
+	strip $@
+
+$(BUILD_DIR)/%.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+install: $(TARGET_LIB) $(HEADER)
+	mkdir -p $(INCLUDE_INSTALL_DIR)
+	cp $(HEADER) $(INCLUDE_INSTALL_DIR)
+	mkdir -p $(INSTALL_DIR)
+	cp $(TARGET_LIB) $(INSTALL_DIR)
+
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -f $(TARGET_LIB)
