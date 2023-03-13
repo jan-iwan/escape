@@ -1,7 +1,7 @@
 MAKEFLAGS += --silent
 
 CC = gcc
-CFLAGS = -c -Wall -Werror -fPIC -O2 -pedantic
+CFLAGS = -c -Wall -Werror -fPIC -O2 -Wpedantic
 LDFLAGS = -shared
 
 TARGET_LIB = libescape.so

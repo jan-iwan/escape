@@ -6,7 +6,7 @@
 int fcoloresc(enum ColorEsc code, FILE *file) {
     bp = 0;
     append(buffer, bp, ESC);
-    variable_color(code);
+    variable_color(buffer, &bp, code);
     append_char(buffer, bp, 'm');
     int written = fwrite(buffer, sizeof(char), bp, file);
 

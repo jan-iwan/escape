@@ -16,12 +16,12 @@ const char* color(const char* fmt) {
     // normal foreground by default
     append_char(buf, bufptr, '3');
 
-    char ch;
-    if((ch = *fmt++) == 'B') {
+    char ch = *fmt++;
+    if(ch == 'B') {
             background = true;
 
             // replace '3' with '4'
-            bp--;
+            bufptr--;
             append_char(buf, bufptr, '4');
 
             ch = *fmt++;
@@ -29,7 +29,7 @@ const char* color(const char* fmt) {
     if(ch == 'h') {
             bright = true;
 
-            bp--;
+            bufptr--;
             if(background) {
                 // replace '4' with "10"
                 append_char(buf, bufptr, '1');
@@ -50,7 +50,7 @@ const char* color(const char* fmt) {
 
     // invalid
     else {
-        bp = bak;
+        bufptr = bak;
         append_char(buf, bufptr, FMT);
         append_char(buf, bufptr, 'c');
 
