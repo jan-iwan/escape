@@ -96,10 +96,6 @@ namespace esc {
 
 #endif /* __cplusplus */
 
-#define ESC "\x1b["
-#define MAX_ESC (white + BRIGHT + BG)
-#define FMT '$'
-
 // escape sequences supported by printc()
 enum Color {
     // mode
@@ -143,6 +139,9 @@ enum Cursor {
     right,
     left,
 };
+
+#define ESC "\x1b["
+#define MAX_ESC (white + BRIGHT + BG)
 
 // write a number of bytes of a colored string to a buffer
 int vsnprintc(char* buf, size_t n, const char* fmt, va_list arg);
@@ -189,6 +188,13 @@ int fcursor(FILE* file, enum Cursor, ...);
 int cursor(enum Cursor, ...);
 
 #ifdef __cplusplus
+
+// C++ would return int when adding enums and make color() not accept int
+// as parameter. This overload allows to call color(red + BG)
+inline enum Color operator +(enum Color color, enum Color modifier) {
+    return Color((int)color + (int)modifier);
+}
+
 } /* extern "C" */
 } /* namespace esc */
 

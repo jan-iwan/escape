@@ -6,6 +6,8 @@
 #include "buffer.h"
 #include "variable_color.h"
 
+#define FMT '$'
+
 #define MAX_ESC_LEN (sizeof(ESC "\x1b[100m") + 1)
 #define BUF_LIMIT (n - MAX_ESC_LEN)
 
