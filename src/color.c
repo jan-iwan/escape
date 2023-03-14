@@ -3,6 +3,6 @@
 #include "buffer.h"
 #include "variable_color.h"
 
-int coloresc(enum ColorEsc code) {
-    return fcoloresc(code, stdout);
+int color(enum ColorEsc code) {
+    return fcolor(code, stdout);
 }

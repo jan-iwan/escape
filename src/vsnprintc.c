@@ -14,7 +14,7 @@
 char* buf;
 unsigned bufptr;
 
-static inline const char* color(const char* fmt) {
+static inline const char* color_directive(const char* fmt) {
     unsigned bak = bufptr - sizeof(ESC);
 
     bool background = false;
@@ -103,7 +103,7 @@ int vsnprintc(char* outbuf, size_t n, const char* fmt, va_list arg) {
 
                 // color
                 case 'c':
-                    fmt = color(fmt);
+                    fmt = color_directive(fmt);
                     goto end_escape;
 
                 /* graphic mode */

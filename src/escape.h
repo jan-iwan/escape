@@ -1,32 +1,30 @@
 #pragma once
 
-/*  #\\~                                        ~//#  *
- *                       ESCAPE                       *
- *            A library to use ANSI escape            *
- *                  sequences easily                  *
- *  #\\~                                        ~//#  */
+/*  #\\~                                                                ~//#  *
+ *  \                                ESCAPE                                /  *
+ *  /                                 v0.2                                 \  *
+ *  \                     A library to use ANSI escape                     /  *
+ *  /                           sequences easily                           \  *
+ *  #\\~                                                                ~//#  */
 
 /*
- *  Functions like printc() which accept a format string
- *  work as follows:
- *      TL;DR: e.g. "$c2" is green, "$cBh1" is bright
- *      red background, "$b" is bold.
-
- *      The string may contain directives which will not
- *      be printed but rather interpreted and will cause
- *      to print an escape sequence.
+ *  TL;DR: e.g. "$c2" is green, "$cBh1" is bright red background, "$b" is bold.
  *
- *      A directive may specify or color grahic mode.
- *      Directives can also be variable and passed as
- *      another argument to the function.
+ *  Functions ending in -c (like printc()) which accept a format string work as
+ *  follows:
  *
- *      '$' indicates the start of a directive, similar
- *      to '%' in printf(). "$$" prints a single '$'
+ *  The string may contain directives which will not be printed but rather
+ *  interpreted and will cause to print an escape sequence.
  *
- *      'c' indicated a color. The color directive has
- *      a special syntax: "$c['B']['h']<n>", <n> is a
- *      number from 0 to 7 which specifies the color
- *      where:
+ *  A directive may specify a color or mode. Directives can also be variable and
+ *  passed as another argument to the function.
+ *
+ *  '$' indicates the start of a directive, similar to '%' in printf(). "$$"
+ *  prints a single '$'.
+ *
+ *  'c' indicated a color. The color directive has a special syntax:
+ *  "$c['B']['h']<n>". <n> is a number from 0 to 7 which specifies the color
+ *  where:
  *      0 - black
  *      1 - red
  *      2 - green
@@ -35,27 +33,22 @@
  *      5 - magenta
  *      6 - cyan
  *      7 - white
- *      'B' stands for "Background" and indicated that
- *      the color will be set for the background rather
- *      than the foreground.
- *      'h' is for the "brigHt" version of the color,
- *      it can be combined with 'B'
+ *  'B' stands for "Background" and indicated that the color will be set for the
+ *  background rather than the foreground.
+ *  'h' is for the "bright" (High) version of the color, it can be combined with
+ *  'B'
  *
- *      'n' indicates a variable sequence that that is
- *      specified in a separate argument passed to the
- *      function. e.g. `printc("$n", bold);`.
- *      any value from the ColorEsc enum can be passed
- *      as a parameter except for "BRIGHT" and "BG"
- *      ("BG" means "BackGround"), which are  added
- *      (with the "+" operator) to a color. e.g.
- *      `printc("$n", green + BRIGHT);`.
+ *  'n' indicates a variable sequence that that is specified in a separate
+ *  argument passed to the function. e.g. `printc("$n", bold);`. Any value from
+ *  the ColorEsc enum can be passed as a parameter except for "BRIGHT" and "BG",
+ *  which are  added (with the "+" operator) to a color. e.g.
+ *  `printc("$n", green + BRIGHT);`.
  *
- *      'E' indicates an escape sequence introducer,
- *      it has the same effect as putting a literal
- *      "\x1b[" in the string.
+ *  'E' indicates an escape sequence introducer, it has the same effect as
+ *  putting a literal "\x1b[" in the string.
  *
- *      All the sequences for bold, italic and similar
- *      are specified by a single character:
+ *  All the sequences for bold, italic and similar are specified by a single
+ *  character:
  *      'r' - reset
  *      'b' - bold
  *      'l' - dim
@@ -66,9 +59,28 @@
  *      's' - invisible
  *      't' - strikethrough
  *
- *      Non-valid directives will be printed as they
- *      appear in the string. e.g "$abc" will print
- *      "$abc".
+ *  Non-valid directives will be printed as they appear in the string. e.g
+ *  "$abc" will print literally "$abc".
+ *  
+ *  A reset escape sequence will be printed at the end of the string.
+ *
+ *
+ *  Functions ending in -cf (like printcf()) will combine printf() with
+ *  printc(). Any arguments for format (interpreted by printf()) need to be
+ *  passed before any for color since the input string is first parsed by
+ *  printf() and then by printc(). e.g `printcf("%d $n%c\n", 12, red, 'A');`.
+ *  This means that `printcf("%ssome color\n", "$c3");` or even
+ *  `printcf("%ssome other color color\n", "$n", blue);` will work fine.
+ *
+ *
+ *  The functions color() and fcolor() take a ColorEsc enum and print the
+ *  corresponding escape sequence. The set color or mode won't be cleared until
+ *  a reset sequence is printed specifically. A call to printc() or similar
+ *  functions will print such a sequence automatically.
+ *
+ *
+ *  The functions cursor() and fcursor() work the same as color() and fcolor()
+ *  except that they take a CursorEsc enum as input
 */
 
 #include <stdio.h>
@@ -80,7 +92,7 @@
 
 // escape sequences supported by printc()
 enum ColorEsc {
-    // graphic mode
+    // mode
     reset       = 0,
     bold        = 1,
     dim         = 2,
@@ -125,36 +137,36 @@ enum CursorEsc {
 // write a number of bytes of a colored string to a buffer
 int vsnprintc(char* buf, size_t n, const char* fmt, va_list arg);
 
-// write a number of bytes of formatted colored output to a buffer
+// write a number of bytes of formatted colored output to a buffer.
 // arguments for format shuold be passed before any for color
 int vsnprintcf(char* buf, size_t n, const char* fmt, va_list arg);
 
 // write a colored string to a file
 int vfprintc(FILE* file, const char* fmt, va_list arg);
 
-// write a formatted colored string to a file
+// write a formatted colored string to a file.
 // arguments for format shuold be passed before any for color
 int vfprintcf(FILE* file, const char* fmt, va_list arg);
 
 // write a colored string to a file
 int fprintc(FILE* file, const char* fmt, ...);
 
-// write a formatted colored string to a file
+// write a formatted colored string to a file.
 // arguments for format shuold be passed before any for color
 int fprintcf(FILE* file, const char* fmt, ...);
 
 // write a colored string to stdout
 int printc(const char* fmt, ...);
 
-// print a formatted colored string
+// print a formatted colored string.
 // arguments for format shuold be passed before any for color
 int printcf(const char* fmt, ...);
 
 // write an escape sequence to a file 
-int fcoloresc(enum ColorEsc code, FILE* file);
+int fcolor(enum ColorEsc code, FILE* file);
 
 // print an escape sequence
-int coloresc(enum ColorEsc code);
+int color(enum ColorEsc code);
 
 // write a escape sequence related to cursor control to a file.
 // if moving the cursor an integer should be passed as and

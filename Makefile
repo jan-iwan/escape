@@ -1,7 +1,7 @@
 MAKEFLAGS += --silent
 
 CC = gcc
-CFLAGS = -c -Wall -Werror -fPIC -O2 -Wpedantic
+CFLAGS = -c -Wall -Werror -Wextra -Wpedantic -fPIC -O2
 LDFLAGS = -shared
 
 TARGET_LIB = libescape.so
@@ -23,7 +23,7 @@ $(TARGET_LIB): $(OBJS)
 
 $(BUILD_DIR)/%.o: %.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 install: $(TARGET_LIB) $(HEADER)
 	mkdir -p $(INCLUDE_INSTALL_DIR)
