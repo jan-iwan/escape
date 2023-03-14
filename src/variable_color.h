@@ -22,7 +22,7 @@ inline unsigned short base10_itoa(unsigned short x, char* outbuf) {
     return ibak;
 }
 
-inline int variable_color(char* buf, unsigned* bufptr, enum ColorEsc code) {
+inline int variable_color(char* buf, unsigned* bufptr, enum Color code) {
     if(code > MAX_ESC)
         return 1;
 

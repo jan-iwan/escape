@@ -78,7 +78,7 @@ int vsnprintc(char* outbuf, size_t n, const char* fmt, va_list arg) {
     bufptr = 0;
 
     // for "$n"
-    enum ColorEsc var;
+    enum Color var;
 
     char ch;
     while((ch = *fmt++) && bufptr < BUF_LIMIT) {
@@ -96,7 +96,7 @@ int vsnprintc(char* outbuf, size_t n, const char* fmt, va_list arg) {
 
                 // variable (can be anything)
                 case 'n':
-                    var = va_arg(arg, enum ColorEsc);
+                    var = va_arg(arg, enum Color);
                     if(variable_color(buf, &bufptr, var))
                         goto invalid_format;
                     goto end_escape;

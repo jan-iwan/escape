@@ -13,7 +13,7 @@ static const char* const cursor_seq[] = {
     [left]      = "D",
 };
 
-int cursor(enum CursorEsc code, ...) {
+int cursor(enum Cursor code, ...) {
     va_list arg;
     va_start(arg, code);
 
@@ -33,7 +33,7 @@ int cursor(enum CursorEsc code, ...) {
     return printed;
 }
 
-int fcursor(FILE* file, enum CursorEsc code, ...) {
+int fcursor(FILE* file, enum Cursor code, ...) {
     va_list arg;
     va_start(arg, code);
 

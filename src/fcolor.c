@@ -3,7 +3,7 @@
 #include "buffer.h"
 #include "variable_color.h"
 
-int fcolor(enum ColorEsc code, FILE *file) {
+int fcolor(enum Color code, FILE *file) {
     bp = 0;
     append(buffer, bp, ESC);
     variable_color(buffer, &bp, code);

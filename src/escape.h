@@ -40,7 +40,7 @@
  *
  *  'n' indicates a variable sequence that that is specified in a separate
  *  argument passed to the function. e.g. `printc("$n", bold);`. Any value from
- *  the ColorEsc enum can be passed as a parameter except for "BRIGHT" and "BG",
+ *  the Color enum can be passed as a parameter except for "BRIGHT" and "BG",
  *  which are  added (with the "+" operator) to a color. e.g.
  *  `printc("$n", green + BRIGHT);`.
  *
@@ -73,14 +73,14 @@
  *  `printcf("%ssome other color color\n", "$n", blue);` will work fine.
  *
  *
- *  The functions color() and fcolor() take a ColorEsc enum and print the
+ *  The functions color() and fcolor() take a Color enum and print the
  *  corresponding escape sequence. The set color or mode won't be cleared until
  *  a reset sequence is printed specifically. A call to printc() or similar
  *  functions will print such a sequence automatically.
  *
  *
  *  The functions cursor() and fcursor() work the same as color() and fcolor()
- *  except that they take a CursorEsc enum as input
+ *  except that they take a Cursor enum as input.
 */
 
 #ifdef __cplusplus
@@ -88,9 +88,12 @@
 #include <cstdarg>
 
 extern "C" {
+namespace esc {
+
 #else
 #include <stdio.h>
 #include <stdarg.h>
+
 #endif /* __cplusplus */
 
 #define ESC "\x1b["
@@ -98,7 +101,7 @@ extern "C" {
 #define FMT '$'
 
 // escape sequences supported by printc()
-enum ColorEsc {
+enum Color {
     // mode
     reset       = 0,
     bold        = 1,
@@ -130,7 +133,7 @@ enum ColorEsc {
 };
 
 // escape sequences supported by and cursor()
-enum CursorEsc {
+enum Cursor {
     wrap_on,
     wrap_off,
     save,
@@ -170,21 +173,23 @@ int printc(const char* fmt, ...);
 int printcf(const char* fmt, ...);
 
 // write an escape sequence to a file 
-int fcolor(enum ColorEsc code, FILE* file);
+int fcolor(enum Color code, FILE* file);
 
 // print an escape sequence
-int color(enum ColorEsc code);
+int color(enum Color code);
 
 // write a escape sequence related to cursor control to a file.
 // if moving the cursor an integer should be passed as and
 // additional parameter to specify the distance
-int fcursor(FILE* file, enum CursorEsc, ...);
+int fcursor(FILE* file, enum Cursor, ...);
 
 // move, save or restore the position of the cursor.
 // if moving the cursor an integer should be passed as and
 // additional parameter to specify the distance
-int cursor(enum CursorEsc, ...);
+int cursor(enum Cursor, ...);
 
 #ifdef __cplusplus
-}
+} /* extern "C" */
+} /* namespace esc */
+
 #endif /* __cplusplus */
