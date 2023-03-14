@@ -83,8 +83,15 @@
  *  except that they take a CursorEsc enum as input
 */
 
+#ifdef __cplusplus
+#include <cstdio>
+#include <cstdarg>
+
+extern "C" {
+#else
 #include <stdio.h>
 #include <stdarg.h>
+#endif /* __cplusplus */
 
 #define ESC "\x1b["
 #define MAX_ESC (white + BRIGHT + BG)
@@ -177,3 +184,7 @@ int fcursor(FILE* file, enum CursorEsc, ...);
 // if moving the cursor an integer should be passed as and
 // additional parameter to specify the distance
 int cursor(enum CursorEsc, ...);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
