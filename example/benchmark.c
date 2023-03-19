@@ -10,26 +10,31 @@
 
 #define DURATION ((double)(end.tv_nsec - start.tv_nsec) / 1000000)
 
-#define TEST "%% %d $c1 $n"
+char default_test[] = "%% %d $c1 $n";
 
 int main(int argc, char* argv[]) {
-    char* path = argc > 1 ? argv[1] : "/dev/null";
-    FILE* file = fopen(path, "w");
+    FILE* file = fopen("/dev/null", "w");
+
+    char* test = argc == 2 ? argv[1] : default_test ;
 
     struct timespec start, end;
 
     // fprintf
-    BENCH(fprintf(file, TEST, argc));
+    BENCH(fprintf(file, test, argc));
     double fprintf_time = DURATION;
 
     // fprintc
-    BENCH(fprintc(file, TEST, bold));
+    BENCH(fprintc(file, test, bold));
     double fprintc_time = DURATION;
 
     // fprintcf
-    BENCH(fprintcf(file, TEST, argc, bold));
+    BENCH(fprintcf(file, test, argc, bold));
     double fprintcf_time = DURATION;
 
+    printcf("$c4$btest string: ");
+    puts(test);
+    if(test == default_test)
+        printcf("$c7try %s <some string>\n",  argv[0]);
     printcf("$c3fprintf():  $c6%.4f$c2ms\n", fprintf_time);
     printcf("$c5fprintc():  $c6%.4f$c2ms\n", fprintc_time);
     printcf("$c1fprintcf(): $c6%.4f$c2ms\n", fprintcf_time);
