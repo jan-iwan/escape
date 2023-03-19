@@ -5,9 +5,9 @@
 
 int fcolor(enum Color code, FILE *file) {
     bp = 0;
-    append(buffer, bp, ESC);
-    variable_color(buffer, &bp, code);
-    append_char(buffer, bp, 'm');
+    append(ESC);
+    variable_color(code);
+    append_char('m');
     int written = fwrite(buffer, sizeof(char), bp, file);
 
     return written ? written : -1;

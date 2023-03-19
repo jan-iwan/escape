@@ -96,6 +96,7 @@ namespace esc {
 
 #endif /* __cplusplus */
 
+#define ESC "\x1b["
 // escape sequences supported by printc()
 enum Color {
     // mode
@@ -140,21 +141,22 @@ enum Cursor {
     left,
 };
 
-#define ESC "\x1b["
-#define MAX_ESC (white + BRIGHT + BG)
-
 // write a number of bytes of a colored string to a buffer
-int vsnprintc(char* buf, size_t n, const char* fmt, va_list arg);
+// not ment for direct use
+// int vsnprintc(char* buf, size_t n, const char* fmt, va_list arg);
 
 // write a number of bytes of formatted colored output to a buffer.
 // arguments for format shuold be passed before any for color
-int vsnprintcf(char* buf, size_t n, const char* fmt, va_list arg);
+// not ment for direct use
+// int vsnprintcf(char* buf, size_t n, const char* fmt, va_list arg);
 
 // write a colored string to a file
+// not ment for direct use
 int vfprintc(FILE* file, const char* fmt, va_list arg);
 
 // write a formatted colored string to a file.
-// arguments for format shuold be passed before any for color
+// arguments for format shuold be passed before any for color.
+// not ment for direct use
 int vfprintcf(FILE* file, const char* fmt, va_list arg);
 
 // write a colored string to a file
@@ -179,6 +181,12 @@ int color(enum Color code);
 
 // write a escape sequence related to cursor control to a file.
 // if moving the cursor an integer should be passed as and
+// additional parameter to specify the distance.
+// not ment for direct use
+int vfcursor(FILE* file, enum Cursor, va_list arg);
+
+// write a escape sequence related to cursor control to a file.
+// if moving the cursor an integer should be passed as and
 // additional parameter to specify the distance
 int fcursor(FILE* file, enum Cursor, ...);
 
@@ -195,7 +203,7 @@ inline enum Color operator +(enum Color color, enum Color modifier) {
     return Color((int)color + (int)modifier);
 }
 
-} /* extern "C" */
 } /* namespace esc */
+} /* extern "C" */
 
 #endif /* __cplusplus */

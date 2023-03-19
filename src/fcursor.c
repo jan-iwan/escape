@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-int cursor(enum Cursor code, ...) {
+int fcursor(FILE* file, enum Cursor code, ...) {
     va_list arg;
     va_start(arg, code);
 
-    int printed = vfcursor(stdout, code, arg);
+    int printed = vfcursor(file, code, arg);
 
     va_end(arg);
 

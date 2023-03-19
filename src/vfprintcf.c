@@ -4,18 +4,17 @@
 #include <stdarg.h>
 #include "buffer.h"
 
+char format_buffer[FMT_BUF_SIZE];
+
 // write a formatted colored string to a file
 int vfprintcf(FILE* file, const char* fmt, va_list arg) {
-    // write colored ortput to buffer
-    int printed = vsnprintcf(buffer, BUF_SIZE, fmt, arg);
+    // call vsnprintf() first to interpret format
+    int printf_status = vsnprintf(format_buffer, FMT_BUF_SIZE, fmt, arg);
 
-    // if there was an error return -1
-    if(printed == -1) 
+    // printf returns a negative number if there was an error
+    if(printf_status < 0)
         return -1;
 
-    // write buffer to file
-    int written = fwrite(buffer, sizeof(char), printed, file);
-
-    // if there was an error return -1, if not return written
-    return written == printed ? written : -1;
+    // finally call vfprintc() to interpret escape sequences
+    return vfprintc(file, format_buffer, arg);
 }

@@ -28,7 +28,7 @@ int main() {
         // make the character appear immediatly
         fflush(stdout);
 
-        usleep(50000);
+        usleep(70000);
         cursor(left, 2);
     }
     color(reset);
