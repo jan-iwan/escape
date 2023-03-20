@@ -48,7 +48,7 @@ Every available function is described in the header
 
 Some examples can be found in `example/`:
 
-![demo]("https://raw.githubusercontent.com/jan-iwan/escape/main/docs/images/demo.png")
+![demo](https://raw.githubusercontent.com/jan-iwan/escape/main/docs/images/demo.png)
 `demo.c`, present in `example/`.
 
 There is support for C++ through the `esc` namespace, e.g `esc::printc()`.
