@@ -48,7 +48,7 @@ Every available function is described in the header
 
 Some examples can be found in `example/`:
 
-<img src="https://raw.githubusercontent.com/jan-iwan/escape/main/docs/images/demo.pn" width="224" height="160">
+<img src="https://raw.githubusercontent.com/jan-iwan/escape/main/docs/images/demo.png" width="224" height="160">
 `demo.c`, present in `example/`.
 
 There is support for C++ through the `esc` namespace, e.g `esc::printc()`.
