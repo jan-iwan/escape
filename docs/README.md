@@ -53,6 +53,7 @@ Some examples can be found in `example/`:
 
 `demo.c`, present in `example/`.
 
+
 There is support for C++ through the `esc` namespace, e.g `esc::printc()`.
 
 An in-depth explanation on how to use the functions provided by the library is available in the header `escape.h`.
