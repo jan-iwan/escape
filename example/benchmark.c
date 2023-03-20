@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
     puts(test);
     if(test == default_test)
         printcf("$c7try %s <some string>\n",  argv[0]);
+
     printcf("$c3fprintf():  $c6%.4f$c2ms\n", fprintf_time);
     printcf("$c5fprintc():  $c6%.4f$c2ms\n", fprintc_time);
     printcf("$c1fprintcf(): $c6%.4f$c2ms\n", fprintcf_time);
