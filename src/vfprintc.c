@@ -18,9 +18,6 @@ static inline const char* color_directive(const char* fmt) {
     // copy of fmt before FMT ('$')
     const char* fmt_bak = fmt - 2;
 
-    // bool background = false;
-    // bool bright = false;
-
     // code for the escape sequence
     // normal foreground by default
     register unsigned short code = 30;
@@ -86,14 +83,15 @@ int vfprintc(FILE* file, const char* fmt, va_list arg) {
                     fmt = color_directive(fmt);
                     break;
 
-                // variable (can be anything)
+                // variable
                 case 'n':
                     var = va_arg(arg, enum Color);
                     if(variable_color(var))
                         goto invalid_format;
                     goto end_escape;
 
-                /* graphic mode */
+
+                /* modes */
 
                 // reset all
                 case 'r':
@@ -104,7 +102,6 @@ int vfprintc(FILE* file, const char* fmt, va_list arg) {
                 case 'b':
                     append_char('1');
                     goto end_escape;
-
 
                 // dim (low)
                 case 'l':
@@ -145,6 +142,7 @@ int vfprintc(FILE* file, const char* fmt, va_list arg) {
                 case 'E':
                     append_char('[');
                     break;
+
 
                 // invalid format
                 default:

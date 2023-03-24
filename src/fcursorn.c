@@ -14,7 +14,10 @@ static const char* const cursor_seq[] = {
     [left]      = "D",
 };
 
-int vfcursor(FILE* file, enum Cursor code, va_list arg) {
+int fcursorn(FILE* file, enum Cursor code, int nargs, ...) {
+    va_list arg;
+    va_start(arg, nargs);
+
     if(code > left)
         return -1;
 
@@ -25,8 +28,12 @@ int vfcursor(FILE* file, enum Cursor code, va_list arg) {
     if(code < up)
         printed = fprintf(file, "\x1b[%s", cursor_seq[code]);
 
-    else
-        printed = fprintf(file, "\x1b[%d%s", va_arg(arg, int), cursor_seq[code]);
+    else {
+        int d = nargs > 0 ? va_arg(arg, int) : 0;
 
+        printed = fprintf(file, "\x1b[%d%s", d, cursor_seq[code]);
+    }
+
+    va_end(arg);
     return printed;
 }

@@ -96,10 +96,15 @@ namespace esc {
 
 #endif /* __cplusplus */
 
+// number of variadic arguments, support for zero arguments
+#define _ESC_NARGS(...) (sizeof((int[]){0, __VA_ARGS__})/sizeof(int) - 1)
+
 #define ESC "\x1b["
-// escape sequences supported by printc()
+// escape sequences supported by the printc() and color() family of functions.
+// each enum value corresponds to the number inside a sequence.
+// e.g. code red (value 31) maps to "\x1b[31m"
 enum Color {
-    // mode
+    // modes
     reset       = 0,
     bold        = 1,
     dim         = 2,
@@ -121,15 +126,16 @@ enum Color {
     cyan        = 36,
     white       = 37,
 
-    // color modifiers
+    // color modifiers.
     // should be added to a color
-    // e.g green + BRIGHT is bright green
-    // red + BRIGHT + BG is bright red background
+    // e.g green + BRIGHT is bright green.
+    // red + BRIGHT + BG is bright red background.
+    // should not be used with modes
     BG          = 10,
     BRIGHT      = 60,
 };
 
-// escape sequences supported by and cursor()
+// escape sequences supported by and cursor(), fcursor() and fcursorn()
 enum Cursor {
     wrap_on,
     wrap_off,
@@ -141,23 +147,23 @@ enum Cursor {
     left,
 };
 
-// write a number of bytes of a colored string to a buffer
-// not ment for direct use
-// int vsnprintc(char* buf, size_t n, const char* fmt, va_list arg);
-
-// write a number of bytes of formatted colored output to a buffer.
-// arguments for format shuold be passed before any for color
-// not ment for direct use
-// int vsnprintcf(char* buf, size_t n, const char* fmt, va_list arg);
-
 // write a colored string to a file
-// not ment for direct use
+// variadic, not meant for direct use
 int vfprintc(FILE* file, const char* fmt, va_list arg);
 
 // write a formatted colored string to a file.
 // arguments for format shuold be passed before any for color.
-// not ment for direct use
+// variadic, not meant for direct use
 int vfprintcf(FILE* file, const char* fmt, va_list arg);
+
+// write a number of bytes of a colored string to a buffer
+// not meant for direct use
+// int vsnprintc(char* buf, size_t n, const char* fmt, va_list arg);
+
+// write a number of bytes of formatted colored output to a buffer.
+// arguments for format shuold be passed before any for color
+// not meant for direct use
+// int vsnprintcf(char* buf, size_t n, const char* fmt, va_list arg);
 
 // write a colored string to a file
 int fprintc(FILE* file, const char* fmt, ...);
@@ -173,27 +179,39 @@ int printc(const char* fmt, ...);
 // arguments for format shuold be passed before any for color
 int printcf(const char* fmt, ...);
 
-// write an escape sequence to a file 
-int fcolor(enum Color code, FILE* file);
+// write a number of escape sequence to a file 
+// number of argument has to be passed, not meant for direct use
+int fcolorn(FILE* file, int nargs, ...);
 
-// print an escape sequence
-int color(enum Color code);
+// write escape sequences to a file
+#define fcolor(file, ...) \
+    fcolorn(file, _ESC_NARGS(__VA_ARGS__), __VA_ARGS__)
+
+// write escape sequences to a stdout.
+// multiple codes can be passed. e.g. `color(red, bold)`
+#define color(...) \
+    fcolorn(stdout, _ESC_NARGS(__VA_ARGS__), __VA_ARGS__)
+
+
+/* ##  cursor movement  ## */
 
 // write a escape sequence related to cursor control to a file.
-// if moving the cursor an integer should be passed as and
-// additional parameter to specify the distance.
-// not ment for direct use
-int vfcursor(FILE* file, enum Cursor, va_list arg);
+// if moving the cursor, an additional integer can be passed
+// to specify specify the distance.
+// number of argument has to be passed, not meant for direct use
+int fcursorn(FILE* file, enum Cursor, int nargs, ...);
 
 // write a escape sequence related to cursor control to a file.
-// if moving the cursor an integer should be passed as and
-// additional parameter to specify the distance
-int fcursor(FILE* file, enum Cursor, ...);
+// if moving the cursor, an additional integer can be passed
+// to specify specify the distance
+#define fcursor(file, code, ...) \
+    fcursorn(file, code, _ESC_NARGS(__VA_ARGS__), ##__VA_ARGS__)
 
 // move, save or restore the position of the cursor.
-// if moving the cursor an integer should be passed as and
-// additional parameter to specify the distance
-int cursor(enum Cursor, ...);
+// if moving the cursor, an additional integer can be passed
+// to specify specify the distance
+#define cursor(code, ...) \
+    fcursorn(stdout, code, _ESC_NARGS(__VA_ARGS__), ##__VA_ARGS__)
 
 #ifdef __cplusplus
 

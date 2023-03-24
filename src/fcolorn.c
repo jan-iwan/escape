@@ -3,10 +3,16 @@
 #include "buffer.h"
 #include "variable_color.h"
 
-int fcolor(enum Color code, FILE *file) {
+int fcolorn(FILE *file, int nargs, ...) {
+    va_list arg;
+    va_start(arg, nargs);
     bp = 0;
     append(ESC);
-    variable_color(code);
+
+    for(int i = 0; i < nargs; i++) {
+        append_char(';');
+        variable_color(va_arg(arg, enum Color));
+    }
     append_char('m');
     int written = fwrite(buffer, sizeof(char), bp, file);
 

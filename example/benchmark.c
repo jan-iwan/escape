@@ -39,5 +39,6 @@ int main(int argc, char* argv[]) {
     printcf("$c3fprintf():  $c6%.4f$c2ms\n", fprintf_time);
     printcf("$c5fprintc():  $c6%.4f$c2ms\n", fprintc_time);
     printcf("$c1fprintcf(): $c6%.4f$c2ms\n", fprintcf_time);
+
     return 0;
 }
