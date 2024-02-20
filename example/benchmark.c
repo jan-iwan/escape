@@ -8,7 +8,8 @@
 #define END     clock_gettime(CLOCK_MONOTONIC, &end)
 #define BENCH(func)   START; for(int i = 0; i < ITER; i++) func; END
 
-#define DURATION ((double)(end.tv_nsec - start.tv_nsec) / 1000000)
+#define DURATION (end.tv_nsec - start.tv_nsec)
+#define TOTAL(duration) ((double)duration/1000000)
 
 char default_test[] = "%% %d $c1 $n";
 
@@ -21,24 +22,28 @@ int main(int argc, char* argv[]) {
 
     // fprintf
     BENCH(fprintf(file, test, argc));
-    double fprintf_time = DURATION;
+    long fprintf_time = DURATION;
 
     // fprintc
     BENCH(fprintc(file, test, bold));
-    double fprintc_time = DURATION;
+    long fprintc_time = DURATION;
 
     // fprintcf
     BENCH(fprintcf(file, test, argc, bold));
-    double fprintcf_time = DURATION;
+    long fprintcf_time = DURATION;
+
+    BENCH(color(red));
+    long color_time = DURATION;
 
     printcf("$c4$btest string: ");
     puts(test);
     if(test == default_test)
         printcf("$c7try %s <some string>\n",  argv[0]);
 
-    printcf("$c3fprintf():  $c6%.4f$c2ms\n", fprintf_time);
-    printcf("$c5fprintc():  $c6%.4f$c2ms\n", fprintc_time);
-    printcf("$c1fprintcf(): $c6%.4f$c2ms\n", fprintcf_time);
+    printcf("$c3fprintf():  $c6%ld$c2ns\n", fprintf_time / ITER);
+    printcf("$c5fprintc():  $c6%ld$c2ns\n", fprintc_time / ITER);
+    printcf("$c1fprintcf(): $c6%ld$c2ns\n", fprintcf_time / ITER);
+    printcf("$c6color(): $c6%ld$c2ns\n", color_time / ITER);
 
     return 0;
 }

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ESCAPE_H
+#define ESCAPE_H
 
 /*  #\\~                                                                ~//#  *
  *  \                                ESCAPE                                /  *
@@ -189,9 +190,10 @@ int fcolorn(FILE* file, int nargs, ...);
 
 // write escape sequences to a stdout.
 // multiple codes can be passed. e.g. `color(red, bold)`
-#define color(...) \
-    fcolorn(stdout, _ESC_NARGS(__VA_ARGS__), __VA_ARGS__)
+// #define color(...)
+//     fcolorn(stdout, _ESC_NARGS(__VA_ARGS__), __VA_ARGS__)
 
+int color(enum Color code);
 
 /* ##  cursor movement  ## */
 
@@ -225,3 +227,5 @@ inline enum Color operator +(enum Color color, enum Color modifier) {
 } /* extern "C" */
 
 #endif /* __cplusplus */
+
+#endif /* ESCAPE_H */
