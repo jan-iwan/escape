@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BUFFER_H
+#define BUFFER_H
 
 #include <string.h>
 
@@ -22,3 +23,5 @@ extern char format_buffer[FMT_BUF_SIZE];
 #define append_char(ch) (buffer[bp++] = ch)
 
 #define undo(len)   (bp -= len)  
+
+#endif /* BUFFER_H */

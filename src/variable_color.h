@@ -1,3 +1,6 @@
+#ifndef VARIABLE_COLOR_H
+#define VARIABLE_COLOR_H
+
 #include "escape.h"
 #include "buffer.h"
 
@@ -34,3 +37,5 @@ static inline int variable_color(enum Color code) {
     bp += base10_itoa(code, &buffer[bp]);
     return 0;
 }
+
+#endif /* VARIABLE_COLOR_H */

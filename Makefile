@@ -1,4 +1,4 @@
-MAKEFLAGS += --silent
+MAKEFLAGS += --silent --jobs=12
 
 CC = gcc
 CFLAGS = -c -Wall -Werror -Wextra -Wpedantic -fPIC -O2

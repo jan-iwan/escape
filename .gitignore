@@ -4,3 +4,5 @@ build
 *.out
 benchmark
 demo
+compile_commands.json
+.cache
