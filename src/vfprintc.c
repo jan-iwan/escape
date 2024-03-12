@@ -125,17 +125,17 @@ int vfprintc(FILE* file, const char* fmt, va_list arg) {
 
                 // inverse
                 case 'v':
-                    append_char('6');
+                    append_char('7');
                     goto end_escape;
 
                 // invisible
                 case 's':
-                    append_char('7');
+                    append_char('8');
                     goto end_escape;
 
                 // strikethrough
                 case 't':
-                    append_char('8');
+                    append_char('9');
                     goto end_escape;
 
                 // sequence introducer
