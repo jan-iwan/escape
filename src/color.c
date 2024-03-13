@@ -2,7 +2,7 @@
 
 #include "variable_color.h"
 
-int color(enum Color code) {
+int color(enum ESC_Color code) {
     bp = 0;
     append(ESC);
     variable_color(code);

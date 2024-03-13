@@ -7,7 +7,7 @@
 char format_buffer[FMT_BUF_SIZE];
 
 // write a formatted colored string to a file
-int vfprintcf(FILE* file, const char* fmt, va_list arg) {
+int vfprintfc(FILE* file, const char* fmt, va_list arg) {
     // call vsnprintf() first to interpret format
     int printf_status = vsnprintf(format_buffer, FMT_BUF_SIZE, fmt, arg);
 

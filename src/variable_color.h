@@ -5,7 +5,7 @@
 #include "buffer.h"
 
 #define BASE 10
-#define MAX_ESC (white + BRIGHT + BG)
+#define MAX_ESC (esc_white + esc_BRIGHT + esc_BG)
 
 // simple and fast conversion from integer to decimal representation
 // only works for positive integers from 0 to 2**16
@@ -30,7 +30,7 @@ static inline unsigned short base10_itoa(unsigned short x, char* outbuf) {
 }
 
 // appends to buffer the escape sequence correspoinding to code
-static inline int variable_color(enum Color code) {
+static inline int variable_color(enum ESC_Color code) {
     if(code > MAX_ESC)
         return 1;
 

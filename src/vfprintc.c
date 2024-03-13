@@ -62,7 +62,7 @@ int vfprintc(FILE* file, const char* fmt, va_list arg) {
     bp = 0;
 
     // for "$n"
-    enum Color var;
+    enum ESC_Color var;
 
     char ch;
     while((ch = *fmt++)) {
@@ -85,7 +85,7 @@ int vfprintc(FILE* file, const char* fmt, va_list arg) {
 
                 // variable
                 case 'n':
-                    var = va_arg(arg, enum Color);
+                    var = va_arg(arg, enum ESC_Color);
                     if(variable_color(var))
                         goto invalid_format;
                     goto end_escape;

@@ -11,7 +11,7 @@ int fcolorn(FILE *file, int nargs, ...) {
 
     for(int i = 0; i < nargs; i++) {
         append_char(';');
-        variable_color(va_arg(arg, enum Color));
+        variable_color(va_arg(arg, enum ESC_Color));
     }
     append_char('m');
     int written = fwrite(buffer, sizeof(char), bp, file);

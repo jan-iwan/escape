@@ -5,13 +5,13 @@
 #include "buffer.h"
 
 // write a formatted colored string to stdout
-int printcf(const char* fmt, ...) {
+int printfc(const char* fmt, ...) {
     // initialize variable arguments
     va_list arg;
     va_start(arg, fmt);
 
     // print formatted colored string to stdout
-    int printed = vfprintcf(stdout, fmt, arg);
+    int printed = vfprintfc(stdout, fmt, arg);
 
     va_end(arg);
     return printed;

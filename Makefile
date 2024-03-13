@@ -1,7 +1,7 @@
 MAKEFLAGS += --silent --jobs=12
 
 CC = gcc
-CFLAGS = -c -Wall -Werror -Wextra -Wpedantic -fPIC -O2
+CFLAGS = -c -Wall -Werror -Wextra -Wpedantic -fPIC -O3
 LDFLAGS = -shared
 
 TARGET = libescape

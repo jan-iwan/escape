@@ -3,7 +3,7 @@
 
 /*  #\\~                                                                ~//#  *
  *  \                                ESCAPE                                /  *
- *  /                                 v0.2                                 \  *
+ *  /                                 v0.5                                 \  *
  *  \                     A library to use ANSI escape                     /  *
  *  /                           sequences easily                           \  *
  *  #\\~                                                                ~//#  */
@@ -62,16 +62,16 @@
  *
  *  Non-valid directives will be printed as they appear in the string. e.g
  *  "$abc" will print literally "$abc".
- *  
+ *
  *  A reset escape sequence will be printed at the end of the string.
  *
  *
- *  Functions ending in -cf (like printcf()) will combine printf() with
+ *  Functions ending in -cf (like printfc()) will combine printf() with
  *  printc(). Any arguments for format (interpreted by printf()) need to be
  *  passed before any for color since the input string is first parsed by
- *  printf() and then by printc(). e.g `printcf("%d $n%c\n", 12, red, 'A');`.
- *  This means that `printcf("%ssome color\n", "$c3");` or even
- *  `printcf("%ssome other color color\n", "$n", blue);` will work fine.
+ *  printf() and then by printc(). e.g `printfc("%d $n%c\n", 12, red, 'A');`.
+ *  This means that `printfc("%ssome color\n", "$c3");` or even
+ *  `printfc("%ssome other color color\n", "$n", blue);` will work fine.
  *
  *
  *  The functions color() and fcolor() take a Color enum and print the
@@ -82,8 +82,9 @@
  *
  *  The functions cursor() and fcursor() work the same as color() and fcolor()
  *  except that they take a Cursor enum as input.
-*/
+ */
 
+// Add C++ bindings
 #ifdef __cplusplus
 #include <cstdio>
 #include <cstdarg>
@@ -98,54 +99,53 @@ namespace esc {
 #endif /* __cplusplus */
 
 // number of variadic arguments, support for zero arguments
-#define _ESC_NARGS(...) (sizeof((int[]){0, __VA_ARGS__})/sizeof(int) - 1)
+#define _ESC_NARGS(...) (sizeof((int[]){0, __VA_ARGS__}) / sizeof(int) - 1)
 
 #define ESC "\x1b["
 // escape sequences supported by the printc() and color() family of functions.
 // each enum value corresponds to the number inside a sequence.
 // e.g. code red (value 31) maps to "\x1b[31m"
-enum Color {
+enum ESC_Color {
     // modes
-    reset       = 0,
-    bold        = 1,
-    dim         = 2,
-    italic      = 3,
-    underline   = 4,
-    blinking    = 5,
-    // invalid  = 6,
-    inverse     = 7,
-    invisible   = 8,
-    strikethrough = 9,
+    esc_reset         = 0,
+    esc_bold          = 1,
+    esc_dim           = 2,
+    esc_italic        = 3,
+    esc_underline     = 4,
+    esc_blinking      = 5, // 6 is not valid
+    esc_inverse       = 7,
+    esc_invisible     = 8,
+    esc_strikethrough = 9,
 
     // colors
-    black       = 30,
-    red         = 31,
-    green       = 32,
-    yellow      = 33,
-    blue        = 34,
-    magenta     = 35,
-    cyan        = 36,
-    white       = 37,
+    esc_black   = 30,
+    esc_red     = 31,
+    esc_green   = 32,
+    esc_yellow  = 33,
+    esc_blue    = 34,
+    esc_magenta = 35,
+    esc_cyan    = 36,
+    esc_white   = 37,
 
     // color modifiers.
     // should be added to a color
     // e.g green + BRIGHT is bright green.
     // red + BRIGHT + BG is bright red background.
     // should not be used with modes
-    BG          = 10,
-    BRIGHT      = 60,
+    esc_BG     = 10,
+    esc_BRIGHT = 60,
 };
 
 // escape sequences supported by and cursor(), fcursor() and fcursorn()
-enum Cursor {
-    wrap_on,
-    wrap_off,
-    save,
-    restore,
-    up,
-    down,
-    right,
-    left,
+enum ESC_Cursor {
+    esc_wrap_on,
+    esc_wrap_off,
+    esc_save,
+    esc_restore,
+    esc_up,
+    esc_down,
+    esc_right,
+    esc_left,
 };
 
 // write a colored string to a file
@@ -155,7 +155,7 @@ int vfprintc(FILE* file, const char* fmt, va_list arg);
 // write a formatted colored string to a file.
 // arguments for format shuold be passed before any for color.
 // variadic, not meant for direct use
-int vfprintcf(FILE* file, const char* fmt, va_list arg);
+int vfprintfc(FILE* file, const char* fmt, va_list arg);
 
 // write a number of bytes of a colored string to a buffer
 // not meant for direct use
@@ -164,36 +164,35 @@ int vfprintcf(FILE* file, const char* fmt, va_list arg);
 // write a number of bytes of formatted colored output to a buffer.
 // arguments for format shuold be passed before any for color
 // not meant for direct use
-// int vsnprintcf(char* buf, size_t n, const char* fmt, va_list arg);
+// int vsnprintfc(char* buf, size_t n, const char* fmt, va_list arg);
 
 // write a colored string to a file
 int fprintc(FILE* file, const char* fmt, ...);
 
 // write a formatted colored string to a file.
 // arguments for format shuold be passed before any for color
-int fprintcf(FILE* file, const char* fmt, ...);
+int fprintfc(FILE* file, const char* fmt, ...);
 
 // write a colored string to stdout
 int printc(const char* fmt, ...);
 
 // print a formatted colored string.
 // arguments for format shuold be passed before any for color
-int printcf(const char* fmt, ...);
+int printfc(const char* fmt, ...);
 
-// write a number of escape sequence to a file 
+// write a number of escape sequence to a file
 // number of argument has to be passed, not meant for direct use
 int fcolorn(FILE* file, int nargs, ...);
 
 // write escape sequences to a file
-#define fcolor(file, ...) \
-    fcolorn(file, _ESC_NARGS(__VA_ARGS__), __VA_ARGS__)
+#define fcolor(file, ...) fcolorn(file, _ESC_NARGS(__VA_ARGS__), __VA_ARGS__)
 
 // write escape sequences to a stdout.
 // multiple codes can be passed. e.g. `color(red, bold)`
 // #define color(...)
 //     fcolorn(stdout, _ESC_NARGS(__VA_ARGS__), __VA_ARGS__)
 
-int color(enum Color code);
+int color(enum ESC_Color code);
 
 /* ##  cursor movement  ## */
 
@@ -201,7 +200,7 @@ int color(enum Color code);
 // if moving the cursor, an additional integer can be passed
 // to specify specify the distance.
 // number of argument has to be passed, not meant for direct use
-int fcursorn(FILE* file, enum Cursor, int nargs, ...);
+int fcursorn(FILE* file, enum ESC_Cursor, int nargs, ...);
 
 // write a escape sequence related to cursor control to a file.
 // if moving the cursor, an additional integer can be passed
@@ -219,8 +218,8 @@ int fcursorn(FILE* file, enum Cursor, int nargs, ...);
 
 // C++ would return int when adding enums and make color() not accept int
 // as parameter. This overload allows to call color(red + BG)
-inline enum Color operator +(enum Color color, enum Color modifier) {
-    return Color((int)color + (int)modifier);
+inline enum Color operator+(enum Color color, enum Color modifier) {
+    return Color((int) color + (int) modifier);
 }
 
 } /* namespace esc */

@@ -1,7 +1,7 @@
-# escape 0.4
+# escape 0.5
 ![escape](https://raw.githubusercontent.com/jan-iwan/escape/main/docs/images/escape.png)
 
-This is a library for C and C++ which provides functions for printing escape sequences, colored output, formatted colored output and moving the cursor around. Some, like `printc()` and `printcf()` are similar in use to `printf()`.
+This is a library for C and C++ which provides functions for printing escape sequences, colored output, formatted colored output and moving the cursor around. Some, like `printc()` and `printfc()` are similar in use to `printf()`.
 
 ## Installation
 The library has no external dependencies so simply compile by running:
