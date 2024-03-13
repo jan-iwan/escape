@@ -1,5 +1,7 @@
 # escape 0.5
-![escape](https://raw.githubusercontent.com/jan-iwan/escape/main/docs/images/escape.png)
+<p align="center">
+    <img src="https://github.com/jan-iwan/escape/assets/125842224/84fda087-48d3-41b4-8929-d5e8aa5067bb">
+</p>
 
 This is a library for C and C++ which provides functions for printing escape sequences, colored output, formatted colored output and moving the cursor around. Some, like `printc()` and `printfc()` are similar in use to `printf()`.
 
@@ -43,13 +45,17 @@ int main() {
 gcc -o example example.c -lescape
 ```
 
-![example](https://raw.githubusercontent.com/jan-iwan/escape/main/docs/images/simple_example.png)
+<p align="center">
+    <img src="https://github.com/jan-iwan/escape/assets/125842224/70842680-da15-4f49-b77a-eb2ae81f27f3">
+</p>
 
 Every available function is described in the header
 
 Some examples can be found in `example/`:
 
-![demo](https://raw.githubusercontent.com/jan-iwan/escape/main/docs/images/demo.png)
+<p align="center">
+    <img src="https://github.com/jan-iwan/escape/assets/125842224/547b57bb-ec14-4c63-833e-246d1ae7b0ab">
+</p>
 
 `demo.c`, present in `example/`.
 
